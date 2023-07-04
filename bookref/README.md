@@ -12,28 +12,32 @@ In a nutshell, LangChain connects the industry popular Large Language Models suc
 
 ## Implementation Steps
 
-Step 1: Importing Libraries
+#### Step 0: Pre-requiste
+* Install python libraries using pip command
+* Store your OpenAI API keys in environment variables
+
+#### Step 1: Importing Libraries
 
 ```python
 from langchain.document_loaders import UnstructuredPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 ```
 
-Step 2: Loading PDF data
+#### Step 2: Loading PDF data
 
 ```python
 loader = UnstructuredPDFLoader ("TopK_Ganesan.pdf")
 data = loader.load()
 ```
 
-Step 3: Split text similar to MapReduce
+#### Step 3: Split text similar to MapReduce
 
 ```python
 text_splitter = RecursiveCharacterText Splitter (chunk_size=1000, chunk_overlap)
 text = text_splitter.split_documents(data)
 ```
 
-Step 4: Vectorizing using Pinecone
+#### Step 4: Vectorizing using Pinecone
 
 ```python
 docsearch = Pinecone.from_texts(
@@ -41,21 +45,21 @@ docsearch = Pinecone.from_texts(
     ai_embeddings, index_name=myindex)
 ```
 
-Step 5: Prompt query using OpenAI
+#### Step 5: Prompt query using OpenAI
 
 ```python
 llm = OpenAI(temperature=0, openai_api_key)
 chain = load_qa_chain(llm, chain_type="stuff")
 ```
 
-Step 6: Intellectual query in PDF
+#### Step 6: Intellectual query in PDF
 
 ```python
 query = "What is the recommended next steps in this research?"
 d=docsearch.similarity_search(query)
 chain.run (input_documents=d, question=query)
 ```
-Final Output
+### Final Output
 ```python
 ' The recommended next step is to extend the existing analysis pattern to the rest of commonly available financial stock exchange data.'
 ```
